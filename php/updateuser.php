@@ -6,6 +6,7 @@
     
     $userType = $_GET['user'];
     $email = $_SESSION['email'];
+    $oldpw=$_POST['oldpwd'];
     $pw=$_POST['newpwd'];
 
     $checkForUser = "SELECT * FROM ".$userType." where email='$email'";
@@ -13,7 +14,7 @@
 
     if(mysqli_num_rows($checkForUserResult)==1){
       while($row = mysqli_fetch_array($checkForUserResult)) {
-        if($pw == $row['Password']){
+        if($oldpw == $row['Password']){
           $sql = "UPDATE ".$userType." SET password='$pw' WHERE email='$email'";
           if ($conn->query($sql) === TRUE) {
             if($userType=='seller'){
@@ -27,7 +28,7 @@
         }
         else{
           echo '<script>alert("Updated Failed! Passwords do not match!")</script>'; 
-          header('Location: ../html/edit_account.php');
+          header('Location: ../html/edit_account.php?user='.$userType);
         }
       }
     }
